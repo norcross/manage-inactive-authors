@@ -53,13 +53,13 @@ function render_user_manage_page() {
 	$form_action_link   = Utilities\get_admin_menu_link();
 
 	// Handle the opening div.
-	echo '<div class="wrap miauthors-admin-settings-page-wrap">';
+	echo '<div class="wrap miauthors-settings-page-wrap">';
 
 		// Handle our admin intro.
 		AdminMarkup\display_admin_page_intro();
 
 		// Wrap the actual form.
-		echo '<form class="miauthors-admin-settings-form" method="post" action="' . esc_url( $form_action_link ) . '">';
+		echo '<form class="miauthors-settings-form" method="post" action="' . esc_url( $form_action_link ) . '">';
 
 			// Display the screen for the pending data if we have it.
 			if ( ! empty( $maybe_is_pending ) ) {

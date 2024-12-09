@@ -28,7 +28,7 @@ add_action( 'admin_init', __NAMESPACE__ . '\run_pending_user_updates' );
 function run_criteria_lookup() {
 
 	// Confirm we requested this action.
-	$confirm_action = filter_input( INPUT_POST, 'miauthors-admin-criteria-submit', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+	$confirm_action = filter_input( INPUT_POST, 'miauthors-criteria-submit', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
 
 	// Make sure it is what we want.
 	if ( empty( $confirm_action ) || 'go' !== $confirm_action ) {
@@ -102,7 +102,7 @@ function run_criteria_lookup() {
 function run_pending_data_clear() {
 
 	// Confirm we requested this action.
-	$confirm_action = filter_input( INPUT_POST, 'miauthors-admin-pending-clear', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+	$confirm_action = filter_input( INPUT_POST, 'miauthors-pending-clear', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
 
 	// Make sure it is what we want.
 	if ( empty( $confirm_action ) || 'go' !== $confirm_action ) {
@@ -134,7 +134,7 @@ function run_pending_data_clear() {
 function run_pending_user_updates() {
 
 	// Confirm we requested this action.
-	$confirm_action = filter_input( INPUT_POST, 'miauthors-admin-pending-submit', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+	$confirm_action = filter_input( INPUT_POST, 'miauthors-pending-submit', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
 
 	// Make sure it is what we want.
 	if ( empty( $confirm_action ) || 'go' !== $confirm_action ) {
