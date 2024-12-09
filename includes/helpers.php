@@ -2,14 +2,14 @@
 /**
  * Our helper functions to use across the plugin.
  *
- * @package ManageInactiveUsers
+ * @package ManageInactiveAuthors
  */
 
 // Call our namepsace.
-namespace NorcrossPlugins\ManageInactiveUsers\Helpers;
+namespace Norcross\ManageInactiveAuthors\Helpers;
 
 // Set our aliases.
-use NorcrossPlugins\ManageInactiveUsers as Core;
+use Norcross\ManageInactiveAuthors as Core;
 
 /**
  * Get the array of each kind of date range box we have.
@@ -21,12 +21,12 @@ use NorcrossPlugins\ManageInactiveUsers as Core;
 function get_range_types( $keys = false ) {
 
 	// Set an array of what we know we need.
-	$ranges = array(
-		DAY_IN_SECONDS   => __( 'Days', 'manage-inactive-users' ),
-		WEEK_IN_SECONDS  => __( 'Weeks', 'manage-inactive-users' ),
-		MONTH_IN_SECONDS => __( 'Months', 'manage-inactive-users' ),
-		YEAR_IN_SECONDS  => __( 'Years', 'manage-inactive-users' ),
-	);
+	$ranges = [
+		DAY_IN_SECONDS   => __( 'Days', 'manage-inactive-authors' ),
+		WEEK_IN_SECONDS  => __( 'Weeks', 'manage-inactive-authors' ),
+		MONTH_IN_SECONDS => __( 'Months', 'manage-inactive-authors' ),
+		YEAR_IN_SECONDS  => __( 'Years', 'manage-inactive-authors' ),
+	];
 
 	// Set the ranges with a filter.
 	$ranges = apply_filters( Core\HOOK_PREFIX . 'range_types', $ranges );
@@ -50,11 +50,11 @@ function get_range_types( $keys = false ) {
 function get_user_roles( $keys = false ) {
 
 	// Set an array of what we know we need.
-	$roles  = array(
-		'contributor' => __( 'Contributor', 'manage-inactive-users' ),
-		'author'      => __( 'Author', 'manage-inactive-users' ),
-		'editor'      => __( 'Editor', 'manage-inactive-users' ),
-	);
+	$roles  = [
+		'contributor' => __( 'Contributor', 'manage-inactive-authors' ),
+		'author'      => __( 'Author', 'manage-inactive-authors' ),
+		'editor'      => __( 'Editor', 'manage-inactive-authors' ),
+	];
 
 	// Set the ranges with a filter.
 	$roles  = apply_filters( Core\HOOK_PREFIX . 'user_roles', $roles );
@@ -81,28 +81,28 @@ function get_error_notice_text( $return_code = '' ) {
 	switch ( esc_attr( $return_code ) ) {
 
 		case 'NO-CRITERIA' :
-			return __( 'No parameters were defined. Please review the options below and try again.', 'manage-inactive-users' );
+			return __( 'No parameters were defined. Please review the options below and try again.', 'manage-inactive-authors' );
 			break;
 
 		case 'MISSING-USER-ROLES' :
-			return __( 'No user roles were selected. Please select one or more and try again.', 'manage-inactive-users' );
+			return __( 'No user roles were selected. Please select one or more and try again.', 'manage-inactive-authors' );
 			break;
 
 		case 'MISSING-DATE-INFO' :
-			return __( 'Please enter both a numeric value and the range to set a date.', 'manage-inactive-users' );
+			return __( 'Please enter both a numeric value and the range to set a date.', 'manage-inactive-authors' );
 			break;
 
 		case 'NO-INACTIVE-USERS' :
-			return __( 'No inactive users were found based on the selected options.', 'manage-inactive-users' );
+			return __( 'No inactive users were found based on the selected options.', 'manage-inactive-authors' );
 			break;
 
 		case 'unknown' :
 		case 'unknown-error' :
-			return __( 'There was an unknown error with your request.', 'manage-inactive-users' );
+			return __( 'There was an unknown error with your request.', 'manage-inactive-authors' );
 			break;
 
 		default :
-			return __( 'There was an error with your request.', 'manage-inactive-users' );
+			return __( 'There was an error with your request.', 'manage-inactive-authors' );
 			break;
 
 		// End all case breaks.
@@ -147,7 +147,7 @@ function get_inactive_user_ids( $user_ids = array(), $inactive_stamp = 0 ) {
 	}
 
 	// Set an empty for converting.
-	$set_inactive_array = array();
+	$set_inactive_array = [];
 
 	// Set the global.
 	global $wpdb;
@@ -168,7 +168,6 @@ function get_inactive_user_ids( $user_ids = array(), $inactive_stamp = 0 ) {
 
 		// Process the query.
 		$query_run  = $wpdb->get_var( $query_args );
-		// preprint( $query_run, true );
 
 		// If they have no date, they are very inactive.
 		if ( empty( $query_run ) ) {
@@ -208,11 +207,11 @@ function get_inactive_user_ids( $user_ids = array(), $inactive_stamp = 0 ) {
 function set_pending_user_ids( $user_ids = array(), $inactive_stamp = 0  ) {
 
 	// Set a data array.
-	$setup_pending_data = array(
+	$setup_pending_data = [
 		'count' => count( $user_ids ),
 		'stamp' => absint( $inactive_stamp ),
 		'users' => $user_ids,
-	);
+	];
 
 	// Store the IDs as an option and then redirect.
 	update_option( Core\OPTION_PREFIX . 'inactives', $setup_pending_data, 'no' );

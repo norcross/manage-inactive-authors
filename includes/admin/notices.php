@@ -2,17 +2,17 @@
 /**
  * Handle any admin notices.
  *
- * @package ManageInactiveUsers
+ * @package ManageInactiveAuthors
  */
 
 // Declare our namespace.
-namespace NorcrossPlugins\ManageInactiveUsers\Admin\Notices;
+namespace Norcross\ManageInactiveAuthors\Admin\Notices;
 
 // Set our aliases.
-use NorcrossPlugins\ManageInactiveUsers as Core;
-use NorcrossPlugins\ManageInactiveUsers\Helpers as Helpers;
-use NorcrossPlugins\ManageInactiveUsers\Utilities as Utilities;
-use NorcrossPlugins\ManageInactiveUsers\Admin\Markup as AdminMarkup;
+use Norcross\ManageInactiveAuthors as Core;
+use Norcross\ManageInactiveAuthors\Helpers as Helpers;
+use Norcross\ManageInactiveAuthors\Utilities as Utilities;
+use Norcross\ManageInactiveAuthors\Admin\Markup as AdminMarkup;
 
 /**
  * Start our engines.
