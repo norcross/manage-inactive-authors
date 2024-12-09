@@ -2,15 +2,15 @@
 /**
  * Handle any admin-related setup.
  *
- * @package ManageInactiveUsers
+ * @package ManageInactiveAuthors
  */
 
 // Declare our namespace.
-namespace NorcrossPlugins\ManageInactiveUsers\Admin\Setup;
+namespace Norcross\ManageInactiveAuthors\Admin\Setup;
 
 // Set our aliases.
-use NorcrossPlugins\ManageInactiveUsers as Core;
-use NorcrossPlugins\ManageInactiveUsers\Utilities as Utilities;
+use Norcross\ManageInactiveAuthors as Core;
+use Norcross\ManageInactiveAuthors\Utilities as Utilities;
 
 /**
  * Start our engines.
@@ -26,7 +26,7 @@ add_filter( 'removable_query_args', __NAMESPACE__ . '\add_removable_args' );
 function load_admin_core_assets() {
 
 	// Set my handle.
-	$handle = 'miu-setup-admin';
+	$handle = 'manage-inactive-authors';
 
 	// Set a file suffix structure based on whether or not we want a minified version.
 	$file   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? $handle : $handle . '.min';
@@ -36,9 +36,6 @@ function load_admin_core_assets() {
 
 	// Load our primary CSS file.
 	wp_enqueue_style( $handle, Core\ASSETS_URL . '/css/' . $file . '.css', false, $vers, 'all' );
-
-	// And our JS.
-	wp_enqueue_script( $handle, Core\ASSETS_URL . '/js/' . $file . '.js', array( 'jquery' ), $vers, false );
 }
 
 /**
@@ -51,13 +48,13 @@ function load_admin_core_assets() {
 function add_removable_args( $args ) {
 
 	// Set the array of new args.
-	$setup_custom_args  = array(
+	$setup_custom_args  = [
 		'miu-admin-status',
 		'miu-admin-success',
 		'miu-admin-action-complete',
 		'miu-admin-action-result',
 		'miu-admin-error-code',
-	);
+	];
 
 	// Include my new args and return.
 	return wp_parse_args( $setup_custom_args, $args );

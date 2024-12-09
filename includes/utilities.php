@@ -2,14 +2,14 @@
 /**
  * Our utility functions to use across the plugin.
  *
- * @package ManageInactiveUsers
+ * @package ManageInactiveAuthors
  */
 
 // Call our namepsace.
-namespace NorcrossPlugins\ManageInactiveUsers\Utilities;
+namespace Norcross\ManageInactiveAuthors\Utilities;
 
 // Set our aliases.
-use NorcrossPlugins\ManageInactiveUsers as Core;
+use Norcross\ManageInactiveAuthors as Core;
 
 /**
  * Do the whole 'check current screen' progressions.
@@ -65,7 +65,7 @@ function get_admin_menu_link() {
 
 	// If we're doing Ajax, build it manually.
 	if ( wp_doing_ajax() ) {
-		return add_query_arg( array( 'page' => $set_menu_root ), admin_url( 'users.php' ) );
+		return add_query_arg( [ 'page' => $set_menu_root ], admin_url( 'users.php' ) );
 	}
 
 	// Use the `menu_page_url` function if we have it.
@@ -76,7 +76,7 @@ function get_admin_menu_link() {
 	}
 
 	// Build out the link if we don't have our function.
-	return add_query_arg( array( 'page' => $set_menu_root ), admin_url( 'users.php' ) );
+	return add_query_arg( [ 'page' => $set_menu_root ], admin_url( 'users.php' ) );
 }
 
 /**
@@ -94,14 +94,14 @@ function redirect_admin_action_result( $error = '', $result = 'failed', $success
 	$base_redirect  = get_admin_menu_link();
 
 	// Set up my redirect args.
-	$redirect_args  = array(
+	$redirect_args  = [
 		'miu-admin-success'         => $success,
 		'miu-admin-action-complete' => 1,
 		'miu-admin-action-result'   => esc_attr( $result ),
-	);
+	];
 
 	// Add the error code if we have one.
-	$redirect_args  = ! empty( $error ) ? wp_parse_args( $redirect_args, array( 'miu-admin-error-code' => esc_attr( $error ) ) ) : $redirect_args;
+	$redirect_args  = ! empty( $error ) ? wp_parse_args( $redirect_args, [ 'miu-admin-error-code' => esc_attr( $error ) ] ) : $redirect_args;
 
 	// Now set my redirect link.
 	$redirect_link  = add_query_arg( $redirect_args, $base_redirect );
@@ -122,7 +122,7 @@ function redirect_admin_pending_status() {
 	$base_redirect  = get_admin_menu_link();
 
 	// Now set my redirect link.
-	$redirect_link  = add_query_arg( array( 'miu-admin-status' => 'pending' ), $base_redirect );
+	$redirect_link  = add_query_arg( ['miu-admin-status' => 'pending'], $base_redirect );
 
 	// Do the redirect.
 	wp_safe_redirect( $redirect_link );

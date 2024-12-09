@@ -2,16 +2,16 @@
 /**
  * Handle the processing involves.
  *
- * @package ManageInactiveUsers
+ * @package ManageInactiveAuthors
  */
 
 // Declare our namespace.
-namespace NorcrossPlugins\ManageInactiveUsers\Admin\Process;
+namespace Norcross\ManageInactiveAuthors\Admin\Process;
 
 // Set our aliases.
-use NorcrossPlugins\ManageInactiveUsers as Core;
-use NorcrossPlugins\ManageInactiveUsers\Utilities as Utilities;
-use NorcrossPlugins\ManageInactiveUsers\Helpers as Helpers;
+use Norcross\ManageInactiveAuthors as Core;
+use Norcross\ManageInactiveAuthors\Utilities as Utilities;
+use Norcross\ManageInactiveAuthors\Helpers as Helpers;
 
 /**
  * Start our engines.
@@ -27,23 +27,31 @@ add_action( 'admin_init', __NAMESPACE__ . '\run_pending_user_updates' );
  */
 function run_criteria_lookup() {
 
-	// First check for the POST variable.
-	if ( ! isset( $_POST['miu-admin-criteria-submit'] ) || 'go' !== sanitize_text_field( $_POST['miu-admin-criteria-submit'] ) ) {
+	// Confirm we requested this action.
+	$confirm_action = filter_input( INPUT_POST, 'miauthors-admin-criteria-submit', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+
+	// Make sure it is what we want.
+	if ( empty( $confirm_action ) || 'go' !== $confirm_action ) {
 		return;
 	}
 
-	// Check to see if our nonce was provided.
-	if ( empty( $_POST[ Core\NONCE_PREFIX . 'criteria_set' ] ) || ! wp_verify_nonce( $_POST[ Core\NONCE_PREFIX . 'criteria_set' ], Core\NONCE_PREFIX . 'criteria_submit' ) ) {
-		wp_die( __( 'The security nonce did not validate. Please try again later.', 'manage-inactive-users' ) );
+	// Make sure we have a nonce.
+	$confirm_nonce  = filter_input( INPUT_POST, 'miauthors-nonce-criteria', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+
+	// Handle the nonce check.
+	if ( empty( $confirm_nonce ) || ! wp_verify_nonce( $confirm_nonce, Core\NONCE_PREFIX . 'criteria_submit' ) ) {
+
+		// Let them know they had a failure.
+		wp_die( esc_html__( 'There was an error validating the nonce.', 'manage-inactive-users' ), esc_html__( 'Manage Inactive Authors', 'manage-inactive-users' ), [ 'back_link' => true ] );
 	}
+
+	// Get the passed critera entries.
+	$user_criteria  = filter_input( INPUT_POST, 'miauthors-criteria-settings', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY );
 
 	// Error out with nothing.
-	if ( empty( $_POST['miu-criteria-settings'] ) ) {
+	if ( empty( $user_criteria ) ) {
 		Utilities\redirect_admin_action_result( 'NO-CRITERIA' );
 	}
-
-	// Set the variable.
-	$user_criteria  = $_POST['miu-criteria-settings'];
 
 	// Error out with the date items missing.
 	if ( empty( $user_criteria['roles'] ) ) {
@@ -51,7 +59,7 @@ function run_criteria_lookup() {
 	}
 
 	// Error out with the date items missing.
-	if ( empty( $user_criteria['number'] ) || empty( $user_criteria['range'] ) ) {
+	if ( empty( absint( $user_criteria['number'] ) ) || empty( absint( $user_criteria['range'] ) ) ) {
 		Utilities\redirect_admin_action_result( 'MISSING-DATE-INFO' );
 	}
 
@@ -59,14 +67,14 @@ function run_criteria_lookup() {
 	$set_role_array = array_map( 'sanitize_text_field', $user_criteria['roles'] );
 
 	// Get the timestamp we need based on the range.
-	$inactive_stamp = Helpers\calculate_date_for_query( $user_criteria['number'], $user_criteria['range'] );
+	$inactive_stamp = Helpers\calculate_date_for_query( absint( $user_criteria['number'] ), absint( $user_criteria['range'] ) );
 
 	// Build the arguments for the users.
-	$user_lookup_args   = array(
+	$user_lookup_args   = [
 		'fields'   => 'ids',
 		'role__in' => $set_role_array,
 		'number'   => -1
-	);
+	];
 
 	// Pull my contributors list.
 	$build_user_array   = get_users( $user_lookup_args );
@@ -93,14 +101,22 @@ function run_criteria_lookup() {
  */
 function run_pending_data_clear() {
 
-	// First check for the POST variable.
-	if ( ! isset( $_POST['miu-admin-pending-clear'] ) || 'go' !== sanitize_text_field( $_POST['miu-admin-pending-clear'] ) ) {
+	// Confirm we requested this action.
+	$confirm_action = filter_input( INPUT_POST, 'miauthors-admin-pending-clear', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+
+	// Make sure it is what we want.
+	if ( empty( $confirm_action ) || 'go' !== $confirm_action ) {
 		return;
 	}
 
-	// Check to see if our nonce was provided.
-	if ( empty( $_POST[ Core\NONCE_PREFIX . 'pending_set' ] ) || ! wp_verify_nonce( $_POST[ Core\NONCE_PREFIX . 'pending_set' ], Core\NONCE_PREFIX . 'pending_submit' ) ) {
-		wp_die( __( 'The security nonce did not validate. Please try again later.', 'manage-inactive-users' ) );
+	// Make sure we have a nonce.
+	$confirm_nonce  = filter_input( INPUT_POST, 'miauthors-nonce-pending', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+
+	// Handle the nonce check.
+	if ( empty( $confirm_nonce ) || ! wp_verify_nonce( $confirm_nonce, Core\NONCE_PREFIX . 'pending_submit' ) ) {
+
+		// Let them know they had a failure.
+		wp_die( esc_html__( 'There was an error validating the nonce.', 'manage-inactive-users' ), esc_html__( 'Manage Inactive Authors', 'manage-inactive-users' ), [ 'back_link' => true ] );
 	}
 
 	// Delete the data.
@@ -117,14 +133,22 @@ function run_pending_data_clear() {
  */
 function run_pending_user_updates() {
 
-	// First check for the POST variable.
-	if ( ! isset( $_POST['miu-admin-pending-submit'] ) || 'go' !== sanitize_text_field( $_POST['miu-admin-pending-submit'] ) ) {
+	// Confirm we requested this action.
+	$confirm_action = filter_input( INPUT_POST, 'miauthors-admin-pending-submit', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+
+	// Make sure it is what we want.
+	if ( empty( $confirm_action ) || 'go' !== $confirm_action ) {
 		return;
 	}
 
-	// Check to see if our nonce was provided.
-	if ( empty( $_POST[ Core\NONCE_PREFIX . 'pending_set' ] ) || ! wp_verify_nonce( $_POST[ Core\NONCE_PREFIX . 'pending_set' ], Core\NONCE_PREFIX . 'pending_submit' ) ) {
-		wp_die( __( 'The security nonce did not validate. Please try again later.', 'manage-inactive-users' ) );
+	// Make sure we have a nonce.
+	$confirm_nonce  = filter_input( INPUT_POST, 'miauthors-nonce-pending', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+
+	// Handle the nonce check.
+	if ( empty( $confirm_nonce ) || ! wp_verify_nonce( $confirm_nonce, Core\NONCE_PREFIX . 'pending_submit' ) ) {
+
+		// Let them know they had a failure.
+		wp_die( esc_html__( 'There was an error validating the nonce.', 'manage-inactive-users' ), esc_html__( 'Manage Inactive Authors', 'manage-inactive-users' ), [ 'back_link' => true ] );
 	}
 
 	// Fetch the user IDs we have stored.
@@ -154,6 +178,3 @@ function run_pending_user_updates() {
 	// And redirect with the success flag.
 	Utilities\redirect_admin_action_result( '', 'updated', true );
 }
-
-
-
