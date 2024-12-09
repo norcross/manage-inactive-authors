@@ -26,19 +26,21 @@ add_action( 'admin_notices', __NAMESPACE__ . '\display_admin_notices' );
  */
 function display_admin_notices() {
 
+	// $confirm_action = filter_input( INPUT_POST, 'miauthors-admin-criteria-submit', FILTER_SANITIZE_SPECIAL_CHARS );
+
 	// Make sure we have the completed flags.
-	if ( empty( $_GET['miu-admin-action-complete'] ) || empty( $_GET['miu-admin-action-result'] ) ) {
+	if ( empty( $_GET['miauthors-admin-action-complete'] ) || empty( $_GET['miauthors-admin-action-result'] ) ) {
 		return;
 	}
 
 	// Determine the message type.
-	$result_type    = ! empty( $_GET['miu-admin-success'] ) ? 'success' : 'error';
+	$result_type    = ! empty( $_GET['miauthors-admin-success'] ) ? 'success' : 'error';
 
 	// Handle dealing with an error return.
 	if ( 'error' === $result_type ) {
 
 		// Figure out my error code.
-		$error_code = ! empty( $_GET['miu-admin-error-code'] ) ? $_GET['miu-admin-error-code'] : 'unknown';
+		$error_code = ! empty( $_GET['miauthors-admin-error-code'] ) ? $_GET['miauthors-admin-error-code'] : 'unknown';
 
 		// Handle my error text retrieval.
 		$error_text = Helpers\get_error_notice_text( $error_code );
@@ -54,10 +56,10 @@ function display_admin_notices() {
 	}
 
 	// Handle my success message based on the clear flag.
-	if ( 'cleared' === sanitize_text_field( $_GET['miu-admin-action-result'] ) ) {
-		$alert_text = __( 'Success! The pending data has been cleared.', 'manage-inactive-users' );
+	if ( 'cleared' === sanitize_text_field( $_GET['miauthors-admin-action-result'] ) ) {
+		$alert_text = __( 'Success! The pending data has been cleared.', 'manage-inactive-authors' );
 	} else {
-		$alert_text = __( 'Success! The selected users have been updated to Subscriber status.', 'manage-inactive-users' );
+		$alert_text = __( 'Success! The selected users have been updated to Subscriber status.', 'manage-inactive-authors' );
 	}
 
 	// And handle the display.

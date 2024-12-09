@@ -201,7 +201,7 @@ function display_user_criteria_submit_fields( $echo = true ) {
 function display_pending_users_list_fields( $pending_data = [], $echo = true ) {
 
 	// Bail without data.
-	if ( empty( $pending_data ) ) {
+	if ( empty( $pending_data ) || empty( $pending_data['users'] ) ) {
 		return;
 	}
 
@@ -221,6 +221,10 @@ function display_pending_users_list_fields( $pending_data = [], $echo = true ) {
 	// Make it an array.
 	$get_user_list_arr  = explode( ',', $get_user_list_raw );
 
+	// And handle the class.
+	$setup_list_class   = 'miauthors-admin-settings-pending-users-list';
+	$setup_list_class  .= count( $pending_data['users'] ) > 30 ? ' miauthors-admin-settings-pending-users-list-columns' : '';
+
 	// Set an empty.
 	$build  = '';
 
@@ -230,16 +234,21 @@ function display_pending_users_list_fields( $pending_data = [], $echo = true ) {
 		// List the count and timestamp that was used.
 		$build .= '<p class="miauthors-admin-settings-pending-users-intro">' . sprintf( __( 'You are about to change %d users to Subscriber status who have not published content since %s.', 'manage-inactive-authors' ), absint( $pending_data['count'] ), gmdate( get_option( 'date_format', 'F j, Y' ), $pending_data['stamp'] ) ) . '</p>';
 
-		// And the list itself without linking each one.
+		// Wrap the whole thing in a div.
 		$build .= '<div class="miauthors-admin-settings-pending-users-block">';
-			$build .= '<ul class="miauthors-admin-settings-pending-users-list">';
+
+			// Put a list wrapper on it.
+			$build .= '<ul class="' . esc_attr( $setup_list_class ) . '">';
 
 			// Loop and display the usernames.
 			foreach ( $get_user_list_arr as $username ) {
 				$build .= '<li>' . esc_html( $username ) . '</li>';
 			}
 
+			// Close the list wrapper.
 			$build .= '</ul>';
+
+		// Close the div around it.
 		$build .= '</div>';
 
 	// Close out my div.

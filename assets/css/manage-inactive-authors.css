@@ -43,12 +43,15 @@ form.miauthors-admin-settings-form .miauthors-admin-settings-label {
 }
 
 .miauthors-admin-settings-pending-users-wrap .miauthors-admin-settings-pending-users-list {
+	margin: 0;
+	padding: 0;
+}
+
+.miauthors-admin-settings-pending-users-wrap .miauthors-admin-settings-pending-users-list-columns {
 	-webkit-columns: 6 120px;
 	-moz-columns: 6 120px;
 	columns: 6 120px;
 	-webkit-column-gap: 0;
 	-moz-column-gap: 0;
 	column-gap: 0;
-	margin: 0;
-	padding: 0;
 }

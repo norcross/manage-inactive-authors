@@ -49,11 +49,11 @@ function add_removable_args( $args ) {
 
 	// Set the array of new args.
 	$setup_custom_args  = [
-		'miu-admin-status',
-		'miu-admin-success',
-		'miu-admin-action-complete',
-		'miu-admin-action-result',
-		'miu-admin-error-code',
+		'miauthors-admin-status',
+		'miauthors-admin-success',
+		'miauthors-admin-action-complete',
+		'miauthors-admin-action-result',
+		'miauthors-admin-error-code',
 	];
 
 	// Include my new args and return.
