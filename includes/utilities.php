@@ -12,43 +12,6 @@ namespace Norcross\ManageInactiveAuthors\Utilities;
 use Norcross\ManageInactiveAuthors as Core;
 
 /**
- * Do the whole 'check current screen' progressions.
- *
- * @param  boolean $ajax      Whether to also bail on an Ajax call.
- * @param  string  $return    How to return the result. Usually boolean.
- *
- * @return boolean|object   Whether or not we are.
- */
-function check_admin_screen( $ajax = false, $return = 'boolean' ) {
-
-	// Do the Ajax check first.
-	if ( ! empty( $ajax ) && wp_doing_ajax() ) {
-		return false;
-	}
-
-	// Bail if not on admin or our function doesnt exist.
-	if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
-		return false;
-	}
-
-	// Get my current screen.
-	$screen = get_current_screen();
-
-	// Bail without.
-	if ( empty( $screen ) || ! is_object( $screen ) ) {
-		return false;
-	}
-
-	// Make sure the base exists and then check it.
-	if ( empty( $screen->base ) || 'users_page_' . Core\MENU_ROOT !== sanitize_text_field( $screen->base ) ) {
-		return false;
-	}
-
-	// Nothing left. We passed.
-	return 'screen' === sanitize_text_field( $return ) ? $screen : true;
-}
-
-/**
  * Fetch the admin menu link on the tools menu.
  *
  * @return string

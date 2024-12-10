@@ -50,13 +50,14 @@ function display_admin_notices() {
 	if ( 'error' === $confirm_type ) {
 
 		// Figure out my error code.
-		$error_code = ! empty( $_GET['miauthors-error-code'] ) ? $_GET['miauthors-error-code'] : 'unknown';
+		$maybe_code = filter_input( INPUT_GET, 'miauthors-error-code', FILTER_SANITIZE_SPECIAL_CHARS );
+		$error_code = ! empty( $maybe_code ) ? $maybe_code : 'unknown';
 
 		// Handle my error text retrieval.
-		$error_text = Helpers\get_error_notice_text( $error_code );
+		$error_text = Helpers\get_admin_notice_text( $error_code );
 
 		// Make sure the error type is correct, since one is more informational.
-		$error_type = 'NO-INACTIVE-USERS' === $error_code ? 'info' : 'error';
+		$error_type = 'no-inactive-users' === $error_code ? 'info' : 'error';
 
 		// And handle the display.
 		AdminMarkup\display_admin_notice_markup( $error_text, $error_type );
@@ -66,11 +67,7 @@ function display_admin_notices() {
 	}
 
 	// Handle my success message based on the clear flag.
-	if ( 'cleared' === sanitize_text_field( $confirm_result ) ) {
-		$alert_text = __( 'Success! The pending data has been cleared.', 'manage-inactive-authors' );
-	} else {
-		$alert_text = __( 'Success! The selected users have been updated to Subscriber status.', 'manage-inactive-authors' );
-	}
+	$alert_text = Helpers\get_admin_notice_text( $confirm_result );
 
 	// And handle the display.
 	AdminMarkup\display_admin_notice_markup( $alert_text, 'success' );

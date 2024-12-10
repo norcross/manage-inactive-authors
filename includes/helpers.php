@@ -75,25 +75,33 @@ function get_user_roles( $keys = false ) {
  *
  * @return string
  */
-function get_error_notice_text( $return_code = '' ) {
+function get_admin_notice_text( $return_code = '' ) {
 
 	// Handle my different error codes.
 	switch ( esc_attr( $return_code ) ) {
 
-		case 'NO-CRITERIA' :
+		case 'no-criteria' :
 			return __( 'No parameters were defined. Please review the options below and try again.', 'manage-inactive-authors' );
 			break;
 
-		case 'MISSING-USER-ROLES' :
+		case 'missing-user-roles' :
 			return __( 'No user roles were selected. Please select one or more and try again.', 'manage-inactive-authors' );
 			break;
 
-		case 'MISSING-DATE-INFO' :
+		case 'missing-date-info' :
 			return __( 'Please enter both a numeric value and the range to set a date.', 'manage-inactive-authors' );
 			break;
 
-		case 'NO-INACTIVE-USERS' :
+		case 'no-inactive-users' :
 			return __( 'No inactive users were found based on the selected options.', 'manage-inactive-authors' );
+			break;
+
+		case 'cleared' :
+			return __( 'Success! The pending data has been cleared.', 'manage-inactive-authors' );
+			break;
+
+		case 'updated' :
+			return __( 'Success! The selected users have been updated to Subscriber status.', 'manage-inactive-authors' );
 			break;
 
 		case 'unknown' :
@@ -152,8 +160,8 @@ function get_inactive_user_ids( $user_ids = array(), $inactive_stamp = 0 ) {
 	// Set the global.
 	global $wpdb;
 
-	// Set our table name.
-	$table_name = $wpdb->posts;
+	// Flush out the cache first.
+	$wpdb->flush();
 
 	// Loop using the ID.
 	foreach ( $user_ids as $user_id ) {
@@ -161,7 +169,7 @@ function get_inactive_user_ids( $user_ids = array(), $inactive_stamp = 0 ) {
 		// Set up our query.
 		$query_args = $wpdb->prepare("
 			SELECT   post_date
-			FROM     $table_name
+			FROM     $wpdb->posts
 			WHERE    post_author = '%d'
 			ORDER BY post_date DESC
 		", absint( $user_id ) );
