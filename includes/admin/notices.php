@@ -26,18 +26,28 @@ add_action( 'admin_notices', __NAMESPACE__ . '\display_admin_notices' );
  */
 function display_admin_notices() {
 
-	// $confirm_action = filter_input( INPUT_POST, 'miauthors-admin-criteria-submit', FILTER_SANITIZE_SPECIAL_CHARS );
+	// Check for our complete flag.
+	$confirm_action = filter_input( INPUT_GET, 'miauthors-action-complete', FILTER_SANITIZE_SPECIAL_CHARS );
 
-	// Make sure we have the completed flags.
-	if ( empty( $_GET['miauthors-action-complete'] ) || empty( $_GET['miauthors-action-result'] ) ) {
+	// Make sure it is what we want.
+	if ( empty( $confirm_action ) || 'yes' !== $confirm_action ) {
+		return;
+	}
+
+	// Now check for the result.
+	$confirm_result = filter_input( INPUT_GET, 'miauthors-action-result', FILTER_SANITIZE_SPECIAL_CHARS );
+
+	// Make sure we have a result to show.
+	if ( empty( $confirm_result ) ) {
 		return;
 	}
 
 	// Determine the message type.
-	$result_type    = ! empty( $_GET['miauthors-success'] ) ? 'success' : 'error';
+	$maybe_failed   = filter_input( INPUT_GET, 'miauthors-success', FILTER_SANITIZE_SPECIAL_CHARS );
+	$confirm_type   = ! empty( $maybe_failed ) ? 'success' : 'error';
 
 	// Handle dealing with an error return.
-	if ( 'error' === $result_type ) {
+	if ( 'error' === $confirm_type ) {
 
 		// Figure out my error code.
 		$error_code = ! empty( $_GET['miauthors-error-code'] ) ? $_GET['miauthors-error-code'] : 'unknown';
@@ -56,7 +66,7 @@ function display_admin_notices() {
 	}
 
 	// Handle my success message based on the clear flag.
-	if ( 'cleared' === sanitize_text_field( $_GET['miauthors-action-result'] ) ) {
+	if ( 'cleared' === sanitize_text_field( $confirm_result ) ) {
 		$alert_text = __( 'Success! The pending data has been cleared.', 'manage-inactive-authors' );
 	} else {
 		$alert_text = __( 'Success! The selected users have been updated to Subscriber status.', 'manage-inactive-authors' );

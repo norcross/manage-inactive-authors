@@ -96,7 +96,7 @@ function redirect_admin_action_result( $error = '', $result = 'failed', $success
 	// Set up my redirect args.
 	$redirect_args  = [
 		'miauthors-success'         => $success,
-		'miauthors-action-complete' => 1,
+		'miauthors-action-complete' => 'yes',
 		'miauthors-action-result'   => esc_attr( $result ),
 	];
 
