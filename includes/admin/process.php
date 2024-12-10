@@ -28,7 +28,7 @@ add_action( 'admin_init', __NAMESPACE__ . '\run_pending_user_updates' );
 function run_criteria_lookup() {
 
 	// Confirm we requested this action.
-	$confirm_action = filter_input( INPUT_POST, 'miauthors-admin-criteria-submit', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+	$confirm_action = filter_input( INPUT_POST, 'miauthors-criteria-submit', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
 
 	// Make sure it is what we want.
 	if ( empty( $confirm_action ) || 'go' !== $confirm_action ) {
@@ -50,17 +50,17 @@ function run_criteria_lookup() {
 
 	// Error out with nothing.
 	if ( empty( $user_criteria ) ) {
-		Utilities\redirect_admin_action_result( 'NO-CRITERIA' );
+		Utilities\redirect_admin_action_result( 'no-criteria' );
 	}
 
 	// Error out with the date items missing.
 	if ( empty( $user_criteria['roles'] ) ) {
-		Utilities\redirect_admin_action_result( 'MISSING-USER-ROLES' );
+		Utilities\redirect_admin_action_result( 'missing-user-roles' );
 	}
 
 	// Error out with the date items missing.
 	if ( empty( absint( $user_criteria['number'] ) ) || empty( absint( $user_criteria['range'] ) ) ) {
-		Utilities\redirect_admin_action_result( 'MISSING-DATE-INFO' );
+		Utilities\redirect_admin_action_result( 'missing-date-info' );
 	}
 
 	// Make sure the array is clean.
@@ -84,7 +84,7 @@ function run_criteria_lookup() {
 
 	// Error out with no users to convert.
 	if ( empty( $maybe_has_inactive ) ) {
-		Utilities\redirect_admin_action_result( 'NO-INACTIVE-USERS' );
+		Utilities\redirect_admin_action_result( 'no-inactive-users' );
 	}
 
 	// Store the relevant data.
@@ -102,7 +102,7 @@ function run_criteria_lookup() {
 function run_pending_data_clear() {
 
 	// Confirm we requested this action.
-	$confirm_action = filter_input( INPUT_POST, 'miauthors-admin-pending-clear', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+	$confirm_action = filter_input( INPUT_POST, 'miauthors-pending-clear', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
 
 	// Make sure it is what we want.
 	if ( empty( $confirm_action ) || 'go' !== $confirm_action ) {
@@ -134,7 +134,7 @@ function run_pending_data_clear() {
 function run_pending_user_updates() {
 
 	// Confirm we requested this action.
-	$confirm_action = filter_input( INPUT_POST, 'miauthors-admin-pending-submit', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
+	$confirm_action = filter_input( INPUT_POST, 'miauthors-pending-submit', FILTER_SANITIZE_SPECIAL_CHARS ); // phpcs:ignore -- the nonce check is happening after this.
 
 	// Make sure it is what we want.
 	if ( empty( $confirm_action ) || 'go' !== $confirm_action ) {
@@ -156,7 +156,7 @@ function run_pending_user_updates() {
 
 	// Error out with no users to convert.
 	if ( empty( $get_pending_users ) ) {
-		Utilities\redirect_admin_action_result( 'NO-INACTIVE-USERS' );
+		Utilities\redirect_admin_action_result( 'no-inactive-users' );
 	}
 
 	// Loop our user IDs and update them.
