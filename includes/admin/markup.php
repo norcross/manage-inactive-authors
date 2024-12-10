@@ -11,7 +11,6 @@ namespace Norcross\ManageInactiveAuthors\Admin\Markup;
 // Set our alias items.
 use Norcross\ManageInactiveAuthors as Core;
 use Norcross\ManageInactiveAuthors\Helpers as Helpers;
-use Norcross\ManageInactiveAuthors\Utilities as Utilities;
 
 /**
  * Handle fetching and using the introduction data.

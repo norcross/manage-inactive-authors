@@ -11,7 +11,6 @@ namespace Norcross\ManageInactiveAuthors\Admin\Notices;
 // Set our aliases.
 use Norcross\ManageInactiveAuthors as Core;
 use Norcross\ManageInactiveAuthors\Helpers as Helpers;
-use Norcross\ManageInactiveAuthors\Utilities as Utilities;
 use Norcross\ManageInactiveAuthors\Admin\Markup as AdminMarkup;
 
 /**
@@ -25,6 +24,14 @@ add_action( 'admin_notices', __NAMESPACE__ . '\display_admin_notices' );
  * @return void
  */
 function display_admin_notices() {
+
+	// Make sure this is the correct admin page.
+	$confirm_admin  = filter_input( INPUT_GET, 'page', FILTER_SANITIZE_SPECIAL_CHARS );
+
+	// Make sure it is what we want.
+	if ( empty( $confirm_admin ) || Core\MENU_ROOT !== $confirm_admin ) {
+		return;
+	}
 
 	// Check for our complete flag.
 	$confirm_action = filter_input( INPUT_GET, 'miauthors-action-complete', FILTER_SANITIZE_SPECIAL_CHARS );

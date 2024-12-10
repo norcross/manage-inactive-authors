@@ -10,20 +10,26 @@ namespace Norcross\ManageInactiveAuthors\Admin\Setup;
 
 // Set our aliases.
 use Norcross\ManageInactiveAuthors as Core;
-use Norcross\ManageInactiveAuthors\Utilities as Utilities;
 
 /**
  * Start our engines.
  */
-add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\load_admin_core_assets' );
+add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\load_admin_core_assets', 10 );
 add_filter( 'removable_query_args', __NAMESPACE__ . '\add_removable_args' );
 
 /**
  * Load any admin CSS or JS as needed.
  *
+ * @param  string $admin_hook  The hook of the page we're on.
+ *
  * @return void
  */
-function load_admin_core_assets() {
+function load_admin_core_assets( $admin_hook ) {
+
+	// Only run this on our page.
+	if ( empty( $admin_hook ) || 'users_page_' . Core\MENU_ROOT !== $admin_hook ) {
+		return;
+	}
 
 	// Set my handle.
 	$handle = 'manage-inactive-authors';
