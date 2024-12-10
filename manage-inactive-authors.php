@@ -3,7 +3,7 @@
  * Plugin Name: Manage Inactive Authors
  * Plugin URI:  https://github.com/norcross/manage-inactive-authors
  * Description: Set inactive users down to subscriber status based on latest published post.
- * Version:     0.0.1
+ * Version:     0.0.2
  * Author:      Andrew Norcross
  * Author URI:  https://andrewnorcross.com
  * Text Domain: manage-inactive-authors
@@ -21,7 +21,7 @@ namespace Norcross\ManageInactiveAuthors;
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Define our plugin version.
-define( __NAMESPACE__ . '\VERS', '0.0.1' );
+define( __NAMESPACE__ . '\VERS', '0.0.2' );
 
 // Plugin root file.
 define( __NAMESPACE__ . '\FILE', __FILE__ );
